@@ -1,0 +1,120 @@
+classdef Product_Design_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure    matlab.ui.Figure
+        Button      matlab.ui.control.Button
+        TextArea_2  matlab.ui.control.TextArea
+        TextArea    matlab.ui.control.TextArea
+        EditField   matlab.ui.control.EditField
+        Image       matlab.ui.control.Image
+        Image2      matlab.ui.control.Image
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+             %Close current app
+   YN = uiconfirm(app.UIFigure,'Do you want to close the Product Design, Materials and Technical Specifiacitons page?', 'Close request');
+if strcmpi(YN,'OK')
+    
+           
+    % Disable Plot Options button while dialog is open
+    app.Button.Enable = "off";
+    
+    delete(app)
+      
+    app = DPP_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogDPP_APP(app);
+          
+end
+
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.ScaleMethod = 'stretch';
+            app.Image2.Position = [1 1 640 480];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-03-09 154533.png');
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Position = [232 198 315 180];
+            app.Image.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'PMSM.png.jpg');
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'text');
+            app.EditField.Editable = 'off';
+            app.EditField.HorizontalAlignment = 'center';
+            app.EditField.FontSize = 18;
+            app.EditField.Position = [96 407 451 53];
+            app.EditField.Value = 'Product Design, Materials and Technical Specifications';
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.UIFigure);
+            app.TextArea.Editable = 'off';
+            app.TextArea.Position = [96 198 120 180];
+            app.TextArea.Value = {'Materials:'; ''; 'Steel'; 'Aluminium'; 'Silicon ion'; 'Copper'; 'Resin'; 'Magnet'; 'Rubber seal'};
+
+            % Create TextArea_2
+            app.TextArea_2 = uitextarea(app.UIFigure);
+            app.TextArea_2.Editable = 'off';
+            app.TextArea_2.Position = [96 42 352 144];
+            app.TextArea_2.Value = {'Technical Specifications:'; ''; 'Product Name:'; 'Name of Manufacturer: '; 'Motor Type: Permanent Magnet Synchronous Motor (PMSM)'; 'Performance:'; 'Weight: '; 'Size:'; 'Recycled Materials:'};
+
+            % Create Button
+            app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
+            app.Button.Icon = fullfile(pathToMLAPP, 'Pictures', 'Home icon.png');
+            app.Button.Position = [462 41 85 70];
+            app.Button.Text = '';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = Product_Design_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
