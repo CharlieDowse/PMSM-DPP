@@ -1,0 +1,113 @@
+classdef Use_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure    matlab.ui.Figure
+        Button      matlab.ui.control.Button
+        TextArea_2  matlab.ui.control.TextArea
+        TextArea    matlab.ui.control.TextArea
+        EditField   matlab.ui.control.EditField
+        Image2      matlab.ui.control.Image
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+                       %Close current app
+   YN = uiconfirm(app.UIFigure,'Do you want to close the Use, Repair and Maintenance page?', 'Close request');
+if strcmpi(YN,'OK')
+    
+           
+    % Disable Plot Options button while dialog is open
+    app.Button.Enable = "off";
+    
+    delete(app)
+      
+    app = DPP_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogDPP_APP(app);
+          
+end
+
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.ScaleMethod = 'stretch';
+            app.Image2.Position = [1 1 640 480];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-03-09 154533.png');
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'text');
+            app.EditField.Editable = 'off';
+            app.EditField.HorizontalAlignment = 'center';
+            app.EditField.FontSize = 18;
+            app.EditField.Position = [173 399 295 49];
+            app.EditField.Value = 'Use, Repair and Maintenance';
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.UIFigure);
+            app.TextArea.Editable = 'off';
+            app.TextArea.Position = [118 196 406 184];
+            app.TextArea.Value = {'Instructions for Use and Safety Information:'; 'Encoders can be optionally added if neccessary'; '1. Wiring, installation and maintenance must always be done by fully qualified specialist personnel.'; '2. Shut off the power to all equipment/machinery involved in the wiring and installation process.'; '3. Do not connect or disconnect an encoder when powered up as this may cause damage.'; '4. A suitable ground connection must be in place for the encoder to work properly.'; '5. Handle the motor with care and avoid banging or knocking.'};
+
+            % Create TextArea_2
+            app.TextArea_2 = uitextarea(app.UIFigure);
+            app.TextArea_2.Position = [118 60 323 118];
+            app.TextArea_2.Value = {'Maintenance Log:'; ''; 'Logged maintenece throughout product life'};
+
+            % Create Button
+            app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
+            app.Button.Icon = fullfile(pathToMLAPP, 'Pictures', 'Home icon.png');
+            app.Button.Position = [454 60 70 68];
+            app.Button.Text = '';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = Use_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
