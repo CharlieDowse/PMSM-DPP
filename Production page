@@ -1,0 +1,126 @@
+classdef Production_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure    matlab.ui.Figure
+        Hyperlink   matlab.ui.control.Hyperlink
+        Image3      matlab.ui.control.Image
+        Button      matlab.ui.control.Button
+        TextArea_3  matlab.ui.control.TextArea
+        TextArea    matlab.ui.control.TextArea
+        EditField   matlab.ui.control.EditField
+        Image2      matlab.ui.control.Image
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+                       %Close current app
+   YN = uiconfirm(app.UIFigure,'Do you want to close the Production and Manufacturing page?', 'Close request');
+if strcmpi(YN,'OK')
+    
+           
+    % Disable Plot Options button while dialog is open
+    app.Button.Enable = "off";
+    
+    delete(app)
+      
+    app = DPP_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogDPP_APP(app);
+          
+end
+
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.ScaleMethod = 'stretch';
+            app.Image2.Position = [1 1 640 480];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-03-09 154533.png');
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'text');
+            app.EditField.Editable = 'off';
+            app.EditField.HorizontalAlignment = 'center';
+            app.EditField.FontSize = 18;
+            app.EditField.Position = [113 397 416 59];
+            app.EditField.Value = 'Production and Manufacturing';
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.UIFigure);
+            app.TextArea.Editable = 'off';
+            app.TextArea.Position = [410 113 201 277];
+            app.TextArea.Value = {'Manufacturing and Assembly Processes:'; ''; 'Casing is cast aluminium due to its low cost and the lower tolerances compared to other components.'; ''; 'Turning is used to manufacture the steel rotor.'; ''; 'Bearings are tapped onto the rotor shaft and seals assembled into the casing.'; ''; 'Automated assembly of stator and armature where the copper coils are wrapped around the aluminium and paper to assemble the stator, then sealed in place with resin.'};
+
+            % Create TextArea_3
+            app.TextArea_3 = uitextarea(app.UIFigure);
+            app.TextArea_3.Position = [25 48 367 342];
+            app.TextArea_3.Value = {'Supply Chain:'};
+
+            % Create Button
+            app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
+            app.Button.Icon = fullfile(pathToMLAPP, 'Pictures', 'Home icon.png');
+            app.Button.Position = [472 33 77 70];
+            app.Button.Text = '';
+
+            % Create Image3
+            app.Image3 = uiimage(app.UIFigure);
+            app.Image3.Position = [30 59 358 321];
+            app.Image3.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Electric-motor-value-chain.png');
+
+            % Create Hyperlink
+            app.Hyperlink = uihyperlink(app.UIFigure);
+            app.Hyperlink.URL = 'https://www.researchgate.net/figure/Electric-motor-value-chain_fig8_294579816';
+            app.Hyperlink.Position = [172 48 73 22];
+            app.Hyperlink.Text = 'View It Here';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = Production_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
