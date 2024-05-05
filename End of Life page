@@ -1,0 +1,113 @@
+classdef EoL_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure   matlab.ui.Figure
+        Image3     matlab.ui.control.Image
+        Button     matlab.ui.control.Button
+        TextArea   matlab.ui.control.TextArea
+        EditField  matlab.ui.control.EditField
+        Image2     matlab.ui.control.Image
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+                       %Close current app
+   YN = uiconfirm(app.UIFigure,'Do you want to close the End of Life page?', 'Close request');
+if strcmpi(YN,'OK')
+    
+           
+    % Disable Plot Options button while dialog is open
+    app.Button.Enable = "off";
+    
+    delete(app)
+      
+    app = DPP_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogDPP_APP(app);
+          
+end
+
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.ScaleMethod = 'stretch';
+            app.Image2.Position = [1 1 640 480];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-03-09 154533.png');
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'text');
+            app.EditField.Editable = 'off';
+            app.EditField.HorizontalAlignment = 'center';
+            app.EditField.FontSize = 18;
+            app.EditField.Position = [146 389 350 46];
+            app.EditField.Value = 'End of Life';
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.UIFigure);
+            app.TextArea.Editable = 'off';
+            app.TextArea.Position = [91 274 460 108];
+            app.TextArea.Value = {'Disassembly and Remanufacturing:'; ''; 'Casing bolts are removed'; 'Electrics cap removed'; 'Casing opened and rotor shaft with magnet removed then separated'; 'Stator removed from casing'; 'Coils removed from the stator'};
+
+            % Create Button
+            app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
+            app.Button.Icon = fullfile(pathToMLAPP, 'Pictures', 'Home icon.png');
+            app.Button.Position = [476 40 75 70];
+            app.Button.Text = '';
+
+            % Create Image3
+            app.Image3 = uiimage(app.UIFigure);
+            app.Image3.Position = [91 40 360 227];
+            app.Image3.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Picture1.png');
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = EoL_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
