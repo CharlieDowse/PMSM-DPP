@@ -1,0 +1,149 @@
+classdef Info_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure    matlab.ui.Figure
+        Image3      matlab.ui.control.Image
+        Hyperlink4  matlab.ui.control.Hyperlink
+        Hyperlink3  matlab.ui.control.Hyperlink
+        Hyperlink2  matlab.ui.control.Hyperlink
+        Hyperlink   matlab.ui.control.Hyperlink
+        Button      matlab.ui.control.Button
+        TextArea2   matlab.ui.control.TextArea
+        TextArea    matlab.ui.control.TextArea
+        EditField   matlab.ui.control.EditField
+        Image2      matlab.ui.control.Image
+    end
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: Button
+        function ButtonPushed(app, event)
+                       %Close current app
+   YN = uiconfirm(app.UIFigure,'Do you want to close the Certifications and Additional Information page?', 'Close request');
+if strcmpi(YN,'OK')
+    
+           
+    % Disable Plot Options button while dialog is open
+    app.Button.Enable = "off";
+    
+    delete(app)
+      
+    app = DPP_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogDPP_APP(app);
+          
+end
+
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.ScaleMethod = 'stretch';
+            app.Image2.Position = [1 1 640 480];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-03-09 154533.png');
+
+            % Create EditField
+            app.EditField = uieditfield(app.UIFigure, 'text');
+            app.EditField.Editable = 'off';
+            app.EditField.HorizontalAlignment = 'center';
+            app.EditField.FontSize = 18;
+            app.EditField.Position = [83 382 476 49];
+            app.EditField.Value = 'Certifications and Additional Information';
+
+            % Create TextArea
+            app.TextArea = uitextarea(app.UIFigure);
+            app.TextArea.Editable = 'off';
+            app.TextArea.Position = [83 215 385 115];
+            app.TextArea.Value = {'Certifications:'; ''; 'Size of Motor, Output Rating (kW):'; ''; 'Efficiency Rating (%):'; ''; 'Maximum Continuous speed rating (rpm):'};
+
+            % Create TextArea2
+            app.TextArea2 = uitextarea(app.UIFigure);
+            app.TextArea2.Editable = 'off';
+            app.TextArea2.Position = [83 53 385 149];
+            app.TextArea2.Value = {'Additional Information:'};
+
+            % Create Button
+            app.Button = uibutton(app.UIFigure, 'push');
+            app.Button.ButtonPushedFcn = createCallbackFcn(app, @ButtonPushed, true);
+            app.Button.Icon = fullfile(pathToMLAPP, 'Pictures', 'Home icon.png');
+            app.Button.Position = [487 53 72 67];
+            app.Button.Text = '';
+
+            % Create Hyperlink
+            app.Hyperlink = uihyperlink(app.UIFigure);
+            app.Hyperlink.URL = 'https://www.youtube.com/watch?v=sOcuZtV8_-I&ab_channel=SunyGroup';
+            app.Hyperlink.Position = [94 154 115 22];
+            app.Hyperlink.Text = 'Stator disassembly';
+
+            % Create Hyperlink2
+            app.Hyperlink2 = uihyperlink(app.UIFigure);
+            app.Hyperlink2.URL = 'https://www.youtube.com/watch?v=UwnZYkLV2SY&ab_channel=NideGroup';
+            app.Hyperlink2.Position = [94 127 177 22];
+            app.Hyperlink2.Text = 'Stator and armature assembly';
+
+            % Create Hyperlink3
+            app.Hyperlink3 = uihyperlink(app.UIFigure);
+            app.Hyperlink3.URL = 'https://www.youtube.com/shorts/UpjDQjO6re8 Coil recycling - https://www.youtube.com/watch?v=P50FWBdlwPM&ab_channel=ArchimedesChannel';
+            app.Hyperlink3.Position = [94 98 114 22];
+            app.Hyperlink3.Text = 'Motor disassembly';
+
+            % Create Hyperlink4
+            app.Hyperlink4 = uihyperlink(app.UIFigure);
+            app.Hyperlink4.URL = 'https://www.ricardo.com/en/case-studies/sustainable-electric-motor-supply-chain';
+            app.Hyperlink4.Position = [94 72 82 22];
+            app.Hyperlink4.Text = 'Supply Chain';
+
+            % Create Image3
+            app.Image3 = uiimage(app.UIFigure);
+            app.Image3.URL = 'https://easa.com/accreditation';
+            app.Image3.Position = [487 222 100 100];
+            app.Image3.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Accreditiation.png');
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = Info_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
