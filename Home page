@@ -1,0 +1,236 @@
+classdef DPP_APP < matlab.apps.AppBase
+
+    % Properties that correspond to app components
+    properties (Access = public)
+        UIFigure                       matlab.ui.Figure
+        ProductionandManufacturingButton  matlab.ui.control.Button
+        Image7                         matlab.ui.control.Image
+        Image6                         matlab.ui.control.Image
+        Image5                         matlab.ui.control.Image
+        Image4                         matlab.ui.control.Image
+        Image3                         matlab.ui.control.Image
+        Image2                         matlab.ui.control.Image
+        Image_2                        matlab.ui.control.Image
+        CertificationsandAdditionalInformationButton  matlab.ui.control.Button
+        EnviromentalImpactsButton      matlab.ui.control.Button
+        EndofLifeButton                matlab.ui.control.Button
+        UseRepairandMaintenanceButton  matlab.ui.control.Button
+        ProductDesignMaterialsandTechnicalSpecificationsButton  matlab.ui.control.Button
+        Image                          matlab.ui.control.Image
+    end
+
+
+
+    % Callbacks that handle component events
+    methods (Access = private)
+
+        % Button pushed function: 
+        % ProductDesignMaterialsandTechnicalSpecificationsButton
+        function ProductDesignMaterialsandTechnicalSpecificationsButtonPushed(app, event)
+
+    % Disable Plot Options button while dialog is open
+    app.ProductDesignMaterialsandTechnicalSpecificationsButton.Enable = "off";
+
+    delete(app)
+
+      app = Product_Design_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogProduct_Design_APP(app);
+
+     
+           
+        end
+
+        % Button pushed function: ProductionandManufacturingButton
+        function ProductionandManufacturingButtonPushed(app, event)
+             
+            % Disable Plot Options button while dialog is open
+    app.ProductionandManufacturingButton.Enable = "off";
+
+    delete(app)
+
+      app = Production_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogProduction_APP(app);
+
+        end
+
+        % Button pushed function: UseRepairandMaintenanceButton
+        function UseRepairandMaintenanceButtonPushed(app, event)
+           
+            % Disable Plot Options button while dialog is open
+    app.UseRepairandMaintenanceButton.Enable = "off";
+
+    delete(app)
+
+      app = Use_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogUse_APP(app);
+
+        end
+
+        % Button pushed function: EndofLifeButton
+        function EndofLifeButtonPushed(app, event)
+            
+             % Disable Plot Options button while dialog is open
+    app.EndofLifeButton.Enable = "off";
+
+    delete(app)
+
+      app = EoL_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogEoL_APP(app);
+
+        end
+
+        % Button pushed function: EnviromentalImpactsButton
+        function EnviromentalImpactsButtonPushed(app, event)
+            
+            % Disable Plot Options button while dialog is open
+    app.EnviromentalImpactsButton.Enable = "off";
+
+    delete(app)
+
+      app = Environment_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogEnvironment_APP(app);
+
+        end
+
+        % Button pushed function: 
+        % CertificationsandAdditionalInformationButton
+        function CertificationsandAdditionalInformationButtonPushed(app, event)
+            
+            % Disable Plot Options button while dialog is open
+    app.CertificationsandAdditionalInformationButton.Enable = "off";
+
+    delete(app)
+    
+      app = Info_APP;
+    % Call dialog box with input values
+    app.DialogApp = DialogInfo_APP(app);
+
+        end
+    end
+
+    % Component initialization
+    methods (Access = private)
+
+        % Create UIFigure and components
+        function createComponents(app)
+
+            % Get the file path for locating images
+            pathToMLAPP = fileparts(mfilename('fullpath'));
+
+            % Create UIFigure and hide until all components are created
+            app.UIFigure = uifigure('Visible', 'off');
+            app.UIFigure.Color = [0.902 0.902 0.902];
+            app.UIFigure.Position = [100 100 640 480];
+            app.UIFigure.Name = 'MATLAB App';
+
+            % Create Image
+            app.Image = uiimage(app.UIFigure);
+            app.Image.Position = [-4 -78 650 634];
+            app.Image.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Picture13.png');
+
+            % Create ProductDesignMaterialsandTechnicalSpecificationsButton
+            app.ProductDesignMaterialsandTechnicalSpecificationsButton = uibutton(app.UIFigure, 'push');
+            app.ProductDesignMaterialsandTechnicalSpecificationsButton.ButtonPushedFcn = createCallbackFcn(app, @ProductDesignMaterialsandTechnicalSpecificationsButtonPushed, true);
+            app.ProductDesignMaterialsandTechnicalSpecificationsButton.Position = [239 336 166 38];
+            app.ProductDesignMaterialsandTechnicalSpecificationsButton.Text = {'Product Design, Materials '; 'and Technical Specifications'};
+
+            % Create UseRepairandMaintenanceButton
+            app.UseRepairandMaintenanceButton = uibutton(app.UIFigure, 'push');
+            app.UseRepairandMaintenanceButton.ButtonPushedFcn = createCallbackFcn(app, @UseRepairandMaintenanceButtonPushed, true);
+            app.UseRepairandMaintenanceButton.Position = [430 170 174 23];
+            app.UseRepairandMaintenanceButton.Text = 'Use, Repair and Maintenance';
+
+            % Create EndofLifeButton
+            app.EndofLifeButton = uibutton(app.UIFigure, 'push');
+            app.EndofLifeButton.ButtonPushedFcn = createCallbackFcn(app, @EndofLifeButtonPushed, true);
+            app.EndofLifeButton.Position = [272 101 100 23];
+            app.EndofLifeButton.Text = 'End of Life';
+
+            % Create EnviromentalImpactsButton
+            app.EnviromentalImpactsButton = uibutton(app.UIFigure, 'push');
+            app.EnviromentalImpactsButton.ButtonPushedFcn = createCallbackFcn(app, @EnviromentalImpactsButtonPushed, true);
+            app.EnviromentalImpactsButton.Position = [66 169 131 23];
+            app.EnviromentalImpactsButton.Text = 'Enviromental Impacts';
+
+            % Create CertificationsandAdditionalInformationButton
+            app.CertificationsandAdditionalInformationButton = uibutton(app.UIFigure, 'push');
+            app.CertificationsandAdditionalInformationButton.ButtonPushedFcn = createCallbackFcn(app, @CertificationsandAdditionalInformationButtonPushed, true);
+            app.CertificationsandAdditionalInformationButton.Position = [48 258 167 38];
+            app.CertificationsandAdditionalInformationButton.Text = {'Certifications and Additional '; 'Information'};
+
+            % Create Image_2
+            app.Image_2 = uiimage(app.UIFigure);
+            app.Image_2.Position = [239 149 166 160];
+            app.Image_2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Screenshot 2024-02-28 161203.png');
+
+            % Create Image2
+            app.Image2 = uiimage(app.UIFigure);
+            app.Image2.Position = [431 274 97 131];
+            app.Image2.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow.png');
+
+            % Create Image3
+            app.Image3 = uiimage(app.UIFigure);
+            app.Image3.Position = [495 214 46 38];
+            app.Image3.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow 6.png');
+
+            % Create Image4
+            app.Image4 = uiimage(app.UIFigure);
+            app.Image4.Position = [436 84 87 74];
+            app.Image4.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow 3.png');
+
+            % Create Image5
+            app.Image5 = uiimage(app.UIFigure);
+            app.Image5.Position = [122 76 100 100];
+            app.Image5.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow 4.png');
+
+            % Create Image6
+            app.Image6 = uiimage(app.UIFigure);
+            app.Image6.Position = [122 205 19 37];
+            app.Image6.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow 2.png');
+
+            % Create Image7
+            app.Image7 = uiimage(app.UIFigure);
+            app.Image7.Position = [122 308 87 78];
+            app.Image7.ImageSource = fullfile(pathToMLAPP, 'Pictures', 'Arrow 5.png');
+
+            % Create ProductionandManufacturingButton
+            app.ProductionandManufacturingButton = uibutton(app.UIFigure, 'push');
+            app.ProductionandManufacturingButton.ButtonPushedFcn = createCallbackFcn(app, @ProductionandManufacturingButtonPushed, true);
+            app.ProductionandManufacturingButton.Position = [431 273 175 23];
+            app.ProductionandManufacturingButton.Text = 'Production and Manufacturing';
+
+            % Show the figure after all components are created
+            app.UIFigure.Visible = 'on';
+        end
+    end
+
+    % App creation and deletion
+    methods (Access = public)
+
+        % Construct app
+        function app = DPP_APP
+
+            % Create UIFigure and components
+            createComponents(app)
+
+            % Register the app with App Designer
+            registerApp(app, app.UIFigure)
+
+            if nargout == 0
+                clear app
+            end
+        end
+
+        % Code that executes before app deletion
+        function delete(app)
+
+            % Delete UIFigure when app is deleted
+            delete(app.UIFigure)
+        end
+    end
+end
